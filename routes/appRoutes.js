@@ -68,16 +68,25 @@ router.post("/register",function(req, res){
 	})
 })
 router.get('/getUserDetails',function(req, res){
-	console.log('entered into getUserDetails API')
-	registerModel.register.find(function(err, data){
-		if(err){
-			console.err(err)
-		}else{
-			res.setHeader('Content-Type', 'application/json');
-			res.status(200);
-			res.send(data);
-		}
-	})
+	console.log('entered into getUserDetails API',req.headers)
+	var token = req.headers['Authorization'];
+		jwt.verify(token, secKey.secret, function(err, decoded){
+			if(!token){
+				res.status(500);
+				res.send({auth:false, message:'Failed to authenticate token'});	
+			}else{
+				registerModel.register.find(function(err, data){
+					if(err){
+						console.err(err)
+					}else{
+						res.setHeader('Content-Type', 'application/json');
+						res.status(200);
+						res.send(data);
+					}
+				})
+			}
+		})	
+			
 })
 //var routes = require('./routes/appRoutes');
 router.get("/home",function(req, res){
