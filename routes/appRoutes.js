@@ -11,7 +11,7 @@ var registerModel = require('../models/registerModel');
 var secKey = require('../secret/config');
 
 //home page, register, login , profile
-router.get("/login", function(req, res){
+router.get("/authenticate", function(req, res){
 	console.log('entered into login API',req.query)
 	registerModel.register.findOne({userName: req.query.userName, password: req.query.password}, function(err, data){
 		if(err){
