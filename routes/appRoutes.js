@@ -19,7 +19,7 @@ router.get("/authenticate", function(req, res){
 		}
 		else{
 			crypto.randomBytes(256, function(ex, buf){
-				console.log('crypto randomBytes entered')
+				console.log('login .')
 				if (ex){
 					console.log("while login "+ex)
 				}else{
@@ -68,20 +68,22 @@ router.post("/register",function(req, res){
 	})
 })
 router.get('/getUserDetails',function(req, res){
-	console.log('entered into getUserDetails API',req.headers)
-	var token = req.headers['Authorization'];
+	console.log('entered into getUserDetails API token',req.query)
+	var token = req.headers['x-access-token'];
 		jwt.verify(token, secKey.secret, function(err, decoded){
 			if(!token){
-				res.status(500);
+				res.status(401);
 				res.send({auth:false, message:'Failed to authenticate token'});	
 			}else{
 				registerModel.register.find(function(err, data){
+					console.log('verify jwt in profile');
 					if(err){
 						console.err(err)
 					}else{
-						res.setHeader('Content-Type', 'application/json');
-						res.status(200);
+						res.set('Content-Type', 'application/json');
+						//res.setHeader("Access-Control-Allow-Headers", "x-access-token")						res.status(200);
 						res.send(data);
+						console.log("profile",data)
 					}
 				})
 			}
@@ -102,8 +104,18 @@ router.get("/home",function(req, res){
 			res.status(500);
 			res.send({auth:false, message:'Failed to authenticate token'});
 		}else{
-			res.status(200);
-			res.send(decoded);
+			registerModel.register.find(function(err, data){
+					console.log('verify jwt in profile');
+					if(err){
+						console.err(err)
+					}else{
+						res.set('Content-Type', 'application/json');
+						//res.setHeader("Access-Control-Allow-Headers", "x-access-token")
+						res.status(200);
+						res.send(data);
+						console.log("profile",data)
+					}
+				})
 		}
 	})
 });

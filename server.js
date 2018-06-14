@@ -3,10 +3,20 @@ var bodyParser = require('body-parser');
 var cors = require('cors');
 var app = express();
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+	console.log('cors calll')
+  	res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Accept');
+    res.header('Access-Control-Request-Headers', 'Content-Type');
   next();
 });
+/*app.use(function(req,res, next){
+	res.setHeader('Access-Control-Allow-Origin', '*');
+//res.setHeader('Access-Control-Allow-Headers', 'Origin, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, X-Response-Time, X-PINGOTHER, X-CSRF-Token,Authorization');
+res.setHeader('Access-Control-Allow-Methods', '*');
+//res.setHeader('Access-Control-Expose-Headers', 'X-Api-Version, X-Request-Id, X-Response-Time');
+//res.setHeader('Access-Control-Max-Age', '1000');
+})*/
 //what happens in each request from client
 var port = process.env.PORT || 3400;
 var path =require('path');
