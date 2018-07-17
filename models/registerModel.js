@@ -6,6 +6,7 @@ var regitsterSchema = new Schema({
 	lastName: String,
 	userName: {type:String, required:true, unique: true},
 	password: {type:String, required:true, unique: true},
+	mobileNo: String, 
 	created: {
 		type:Date,
 		default: Date.now

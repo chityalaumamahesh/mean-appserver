@@ -1,4 +1,5 @@
 var express = require('express');
+var session = require('express-session');
 var bodyParser = require('body-parser');
 var cors = require('cors');
 var app = express();
@@ -30,7 +31,11 @@ app.get("/",(req,res)=>{
 	res.send("Page not found");
 	console.log("Page not found")
 });
-app.listen(port,()=>{
-	 console.log("server started listening!................")
-})
+//added while test with mocha framework
+if(!module.parent) {
+
+	app.listen(port,()=>{
+		 console.log("server started listening!................")
+	})
+ }
 module.exports = app;

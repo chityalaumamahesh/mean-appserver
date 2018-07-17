@@ -23,7 +23,7 @@ router.get("/authenticate", function(req, res){
 				if (ex){
 					console.log("while login "+ex)
 				}else{
-
+				console.log("login response",data)
 				var token;
 				token = jwt.sign({
 					//id: data._id,
@@ -54,6 +54,28 @@ router.post("/register",function(req, res){
 		firstName: req.body.firstName,
 		lastName: req.body.lastName,
 		userName: req.body.userName,
+		password: req.body.password,
+		mobileNo: req.body.mobileNo
+	})
+	registerObj.save(function(err){
+		if(err){
+			console.err(err);
+		}else{
+			res.setHeader('Content-Type', 'application/text');
+			res.send('Register successfully..')
+			res.end();
+		}
+
+	})
+});
+router.put("/update",function(req, res){
+	console.log("entered into register API");
+	//registerModel.register
+	//var hashedPassword = bcrypt.hashSync(req.body.password, 8);
+	var registerObj = new registerModel.register({
+		firstName: req.body.firstName,
+		lastName: req.body.lastName,
+		userName: req.body.userName,
 		password: req.body.password
 	})
 	registerObj.save(function(err){
@@ -66,7 +88,8 @@ router.post("/register",function(req, res){
 		}
 
 	})
-})
+});
+//
 router.get('/getUserDetails',function(req, res){
 	console.log('entered into getUserDetails API token',req.query)
 	var token = req.headers['x-access-token'];
@@ -122,7 +145,7 @@ router.get("/home",function(req, res){
 router.get("/user",(req,res)=>{
 	//res.send('Home page');
 	console.log("user page entered");
-	userModels.user.find(function(err, users){
+	registerModel.register.find(function(err, users){
 		if (err) {
             res.send(err);
         } else {
@@ -134,7 +157,41 @@ router.get("/user",(req,res)=>{
         }
 	})
 	
-})
+});
+router.get("/user/:_id",(req,res)=>{
+	//res.send('Home page');
+	console.log("user page entered");
+	registerModel.register.findById(req.params._id,function(err, users){
+		if (err) {
+            res.send(err);
+        } else {
+        	res.setHeader('Content-Type', 'application/json');
+        	//res.writeHead(200)
+            //res.send(JSON.stringify(users));
+            res.send(users)
+            console.log("users",users);
+        }
+	})
+	
+});
+//need write put API
+router.delete("/user/:_id",(req,res)=>{
+	//res.send('Home page');
+	console.log("user delete entered");
+	registerModel.register.remove({_id:req.params._id},function(err, user){
+		if (err) {
+            res.send(err);
+        } else {
+        	res.setHeader('Content-Type', 'application/text');
+        	//res.writeHead(200)
+            //res.send(JSON.stringify(users));
+            //res.send(user)
+            res.send("deleted user successfully");
+            console.log("users",user);
+        }
+	})
+	
+});
 router.post("/save",(req,res)=>{
 	console.log("entered into save")
 	var Bee = new userModels.user({
